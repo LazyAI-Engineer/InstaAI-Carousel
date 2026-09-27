@@ -340,6 +340,19 @@ This repository documents that learning process.
 
 ---
 
+## 👋 About Me
+
+Hi, I'm Varun from India 🇮🇳.
+
+I'm a beginner learning AI Engineering from the ground up and building projects along the way.
+
+**Lazy AI Engineer** is where I document that journey — learning Python, APIs, LLMs, AI agents, automation, and other AI Engineering concepts by actually building things.
+
+I'm not an expert. I'm learning, experimenting, making mistakes, fixing them, and sharing what I discover.
+
+This project is one step in that journey.
+
+
 ## 🤖 Lazy AI Engineer
 
 **Learn AI. Build Projects. Automate Everything.**
