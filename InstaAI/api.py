@@ -1,4 +1,8 @@
-from video_generator import generate_voice, generate_simple_video
+from video_generator import (
+    generate_voice,
+    generate_simple_video,
+    generate_voice_with_subtitles,
+)
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -86,11 +90,13 @@ class VideoRequest(BaseModel):
 def generate_video_api(data: VideoRequest, request: Request):
     try:
         audio_file = str(OUTPUT_DIR / "short_voice.mp3")
+        subtitle_file = str(OUTPUT_DIR / "captions.srt")
         video_file = str(OUTPUT_DIR / "short.mp4")
 
-        generate_voice(
+        generate_voice_with_subtitles(
             data.text,
-            audio_file
+            audio_file,
+            subtitle_file
         )
 
         generate_simple_video(
@@ -103,7 +109,8 @@ def generate_video_api(data: VideoRequest, request: Request):
         return {
             "status": "success",
             "video_url": f"{base_url}/outputs/short.mp4",
-            "audio_url": f"{base_url}/outputs/short_voice.mp3"
+            "audio_url": f"{base_url}/outputs/short_voice.mp3",
+            "captions_url": f"{base_url}/outputs/captions.srt"
         }
 
     except Exception as e:
