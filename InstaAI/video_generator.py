@@ -41,3 +41,44 @@ def generate_simple_video(audio_file, output_file="short.mp4"):
     video.close()
 
     return output_file
+async def make_voice_with_subtitles(
+    text,
+    audio_file="voice.mp3",
+    subtitle_file="captions.srt"
+):
+    voice = "en-IN-NeerjaNeural"
+
+    communicate = edge_tts.Communicate(
+        text=text,
+        voice=voice,
+        boundary="WordBoundary"
+    )
+
+    submaker = edge_tts.SubMaker()
+
+    with open(audio_file, "wb") as audio:
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                audio.write(chunk["data"])
+
+            elif chunk["type"] == "WordBoundary":
+                submaker.feed(chunk)
+
+    with open(subtitle_file, "w", encoding="utf-8") as subtitles:
+        subtitles.write(submaker.get_srt())
+
+    return audio_file, subtitle_file
+
+
+def generate_voice_with_subtitles(
+    text,
+    audio_file="voice.mp3",
+    subtitle_file="captions.srt"
+):
+    return asyncio.run(
+        make_voice_with_subtitles(
+            text,
+            audio_file,
+            subtitle_file
+        )
+    )
