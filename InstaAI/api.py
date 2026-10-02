@@ -2,6 +2,7 @@ from video_generator import (
     generate_voice,
     generate_simple_video,
     generate_voice_with_subtitles,
+    generate_captioned_video,
 )
 from pathlib import Path
 
@@ -99,10 +100,11 @@ def generate_video_api(data: VideoRequest, request: Request):
             subtitle_file
         )
 
-        generate_simple_video(
-            audio_file,
-            video_file
-        )
+       generate_captioned_video(
+           audio_file,
+           subtitle_file,
+           video_file
+      )
 
         base_url = str(request.base_url).rstrip("/")
 
