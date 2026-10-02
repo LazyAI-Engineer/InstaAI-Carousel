@@ -100,11 +100,11 @@ def generate_video_api(data: VideoRequest, request: Request):
             subtitle_file
         )
 
-       generate_captioned_video(
-           audio_file,
-           subtitle_file,
-           video_file
-      )
+        generate_captioned_video(
+            audio_file,
+            subtitle_file,
+            video_file
+        )
 
         base_url = str(request.base_url).rstrip("/")
 
