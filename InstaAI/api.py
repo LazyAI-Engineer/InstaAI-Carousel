@@ -1,3 +1,4 @@
+from video_generator import generate_voice
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -50,6 +51,29 @@ def generate(data: GenerateRequest, request: Request):
             "topic": topic,
             "slides": slides,
             "images": image_urls
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        class VoiceRequest(BaseModel):
+    text: str
+
+
+@app.post("/generate-voice")
+def generate_voice_api(data: VoiceRequest, request: Request):
+    try:
+        output_file = str(OUTPUT_DIR / "voice.mp3")
+
+        generate_voice(
+            data.text,
+            output_file
+        )
+
+        base_url = str(request.base_url).rstrip("/")
+
+        return {
+            "status": "success",
+            "audio_url": f"{base_url}/outputs/voice.mp3"
         }
 
     except Exception as e:
