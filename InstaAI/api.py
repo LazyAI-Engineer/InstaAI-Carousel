@@ -55,7 +55,7 @@ def generate(data: GenerateRequest, request: Request):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-        class VoiceRequest(BaseModel):
+class VoiceRequest(BaseModel):
     text: str
 
 
