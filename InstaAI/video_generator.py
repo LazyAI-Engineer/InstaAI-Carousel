@@ -23,7 +23,7 @@ def generate_simple_video(audio_file, output_file="short.mp4"):
     audio = AudioFileClip(audio_file)
 
     video = ColorClip(
-        size=(1080, 1920),
+        size=(360, 640),
         color=(15, 15, 20),
         duration=audio.duration
     )
@@ -32,7 +32,7 @@ def generate_simple_video(audio_file, output_file="short.mp4"):
 
     video.write_videofile(
         output_file,
-        fps=30,
+        fps=15,
         codec="libx264",
         audio_codec="aac"
     )
