@@ -188,49 +188,33 @@ def generate_captioned_video(
     subtitle_file,
     output_file="short.mp4"
 ):
-    audio = AudioFileClip(
-        audio_file
-    )
+    audio = AudioFileClip(audio_file)
 
-    # Vertical 9:16 background
     background = ColorClip(
         size=(360, 640),
         color=(15, 15, 20),
         duration=audio.duration
     ).with_audio(audio)
 
-    clips = [background]
-    caption_clips = []
-
-    # ----------------------------------------------
-    # BRANDING
-    # ----------------------------------------------
-
-    brand = (
+    brand_clip = (
         TextClip(
-            text="LAZY AI ENGINEER",
-            font_size=24,
+            text="@Lazy AI Engineer",
+            font_size=26,
             color="white",
             stroke_color="black",
-            stroke_width=1,
+            stroke_width=2,
             method="label",
-            margin=(12, 8),
+            margin=(10, 10),
         )
+        .with_start(0)
         .with_duration(audio.duration)
-        .with_position(
-            ("center", 40)
-        )
+        .with_position((20, 25))
     )
 
-    clips.append(brand)
+    clips = [background, brand_clip]
+    caption_clips = [brand_clip]
 
-    # ----------------------------------------------
-    # WORD-BY-WORD CAPTIONS
-    # ----------------------------------------------
-
-    for start, end, text in read_srt(
-        subtitle_file
-    ):
+    for start, end, text in read_srt(subtitle_file):
 
         caption = (
             TextClip(
@@ -243,28 +227,12 @@ def generate_captioned_video(
                 margin=(20, 20),
             )
             .with_start(start)
-            .with_duration(
-                max(
-                    0.05,
-                    end - start
-                )
-            )
-            .with_position(
-                ("center", 400)
-            )
+            .with_duration(max(0.05, end - start))
+            .with_position(("center", 430))
         )
 
-        caption_clips.append(
-            caption
-        )
-
-        clips.append(
-            caption
-        )
-
-    # ----------------------------------------------
-    # COMBINE EVERYTHING
-    # ----------------------------------------------
+        caption_clips.append(caption)
+        clips.append(caption)
 
     video = CompositeVideoClip(
         clips,
@@ -278,14 +246,9 @@ def generate_captioned_video(
         audio_codec="aac"
     )
 
-    # ----------------------------------------------
-    # CLEANUP
-    # ----------------------------------------------
+    for clip in caption_clips:
+        clip.close()
 
-    for caption in caption_clips:
-        caption.close()
-
-    brand.close()
     video.close()
     background.close()
     audio.close()
