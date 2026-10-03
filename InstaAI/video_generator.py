@@ -144,20 +144,19 @@ def generate_captioned_video(
     for start, end, text in read_srt(subtitle_file):
 
         caption = (
-            TextClip(
-                text=text,
-                font_size=44,
-                color="white",
-                stroke_color="black",
-                stroke_width=2,
-                method="caption",
-                size=(320, None),
-                text_align="center",
-            )
-            .with_start(start)
-            .with_duration(max(0.05, end - start))
-            .with_position(("center", 420))
-        )
+    TextClip(
+        text=text,
+        font_size=44,
+        color="white",
+        stroke_color="black",
+        stroke_width=2,
+        method="label",
+        margin=(20, 20),
+    )
+    .with_start(start)
+    .with_duration(max(0.05, end - start))
+    .with_position(("center", 400))
+)
 
         caption_clips.append(caption)
         clips.append(caption)
