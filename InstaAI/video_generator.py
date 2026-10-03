@@ -196,30 +196,29 @@ def generate_captioned_video(
         duration=audio.duration
     ).with_audio(audio)
 
-   brand_clip = TextClip(
-    text="@Lazy AI Engineer",
-    font_size=16,
-    color="white",
-    stroke_color="black",
-    stroke_width=1,
-    method="label",
-    margin=(6, 6),
-)
-
-brand_clip = (
-    brand_clip
-    .with_start(0)
-    .with_duration(audio.duration)
-    .with_position(
-        (360 - brand_clip.w - 12, 18)
+    brand_clip = TextClip(
+        text="@Lazy AI Engineer",
+        font_size=16,
+        color="white",
+        stroke_color="black",
+        stroke_width=1,
+        method="label",
+        margin=(6, 6),
     )
-)
+
+    brand_clip = (
+        brand_clip
+        .with_start(0)
+        .with_duration(audio.duration)
+        .with_position(
+            (360 - brand_clip.w - 12, 18)
+        )
+    )
 
     clips = [background, brand_clip]
-    caption_clips = [brand_clip]
+    caption_clips = []
 
     for start, end, text in read_srt(subtitle_file):
-
         caption = (
             TextClip(
                 text=text,
@@ -250,9 +249,10 @@ brand_clip = (
         audio_codec="aac"
     )
 
-    for clip in caption_clips:
-        clip.close()
+    for caption in caption_clips:
+        caption.close()
 
+    brand_clip.close()
     video.close()
     background.close()
     audio.close()
