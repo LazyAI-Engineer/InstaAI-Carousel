@@ -190,12 +190,36 @@ def generate_captioned_video(
 ):
     audio = AudioFileClip(audio_file)
 
+    # Dark vertical background
     background = ColorClip(
         size=(360, 640),
         color=(15, 15, 20),
         duration=audio.duration
     ).with_audio(audio)
 
+    # Cyan top accent
+    top_accent = (
+        ColorClip(
+            size=(360, 5),
+            color=(0, 210, 255),
+            duration=audio.duration
+        )
+        .with_opacity(0.8)
+        .with_position((0, 0))
+    )
+
+    # Purple bottom accent
+    bottom_accent = (
+        ColorClip(
+            size=(360, 5),
+            color=(145, 70, 255),
+            duration=audio.duration
+        )
+        .with_opacity(0.8)
+        .with_position((0, 635))
+    )
+
+    # Top-right branding
     brand_clip = TextClip(
         text="@Lazy AI Engineer",
         font_size=16,
@@ -215,10 +239,18 @@ def generate_captioned_video(
         )
     )
 
-    clips = [background, brand_clip]
+    clips = [
+        background,
+        top_accent,
+        bottom_accent,
+        brand_clip
+    ]
+
     caption_clips = []
 
+    # Word-by-word captions
     for start, end, text in read_srt(subtitle_file):
+
         caption = (
             TextClip(
                 text=text,
@@ -230,13 +262,21 @@ def generate_captioned_video(
                 margin=(20, 20),
             )
             .with_start(start)
-            .with_duration(max(0.05, end - start))
-            .with_position(("center", 430))
+            .with_duration(
+                max(
+                    0.05,
+                    end - start
+                )
+            )
+            .with_position(
+                ("center", 430)
+            )
         )
 
         caption_clips.append(caption)
         clips.append(caption)
 
+    # Combine all visual layers
     video = CompositeVideoClip(
         clips,
         size=(360, 640)
@@ -249,10 +289,13 @@ def generate_captioned_video(
         audio_codec="aac"
     )
 
+    # Cleanup
     for caption in caption_clips:
         caption.close()
 
     brand_clip.close()
+    top_accent.close()
+    bottom_accent.close()
     video.close()
     background.close()
     audio.close()
