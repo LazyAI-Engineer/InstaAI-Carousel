@@ -190,36 +190,46 @@ def generate_captioned_video(
 ):
     audio = AudioFileClip(audio_file)
 
-    # Dark vertical background
+    # Main dark background
     background = ColorClip(
         size=(360, 640),
-        color=(15, 15, 20),
+        color=(12, 14, 22),
         duration=audio.duration
     ).with_audio(audio)
 
-    # Cyan top accent
-    top_accent = (
+    # --------------------------------------------------
+    # FUTURISTIC CAPTION PANEL
+    # --------------------------------------------------
+
+    caption_panel = (
         ColorClip(
-            size=(360, 5),
-            color=(0, 210, 255),
+            size=(320, 130),
+            color=(24, 32, 52),
             duration=audio.duration
         )
-        .with_opacity(0.8)
-        .with_position((0, 0))
+        .with_opacity(0.78)
+        .with_position(
+            ("center", 385)
+        )
     )
 
-    # Purple bottom accent
-    bottom_accent = (
+    # Slight inner highlight to make the panel more visible
+    panel_highlight = (
         ColorClip(
-            size=(360, 5),
-            color=(145, 70, 255),
+            size=(310, 3),
+            color=(0, 190, 255),
             duration=audio.duration
         )
-        .with_opacity(0.8)
-        .with_position((0, 635))
+        .with_opacity(0.75)
+        .with_position(
+            ("center", 393)
+        )
     )
 
-    # Top-right branding
+    # --------------------------------------------------
+    # TOP-RIGHT BRANDING
+    # --------------------------------------------------
+
     brand_clip = TextClip(
         text="@Lazy AI Engineer",
         font_size=16,
@@ -241,14 +251,17 @@ def generate_captioned_video(
 
     clips = [
         background,
-        top_accent,
-        bottom_accent,
+        caption_panel,
+        panel_highlight,
         brand_clip
     ]
 
     caption_clips = []
 
-    # Word-by-word captions
+    # --------------------------------------------------
+    # WORD-BY-WORD CAPTIONS
+    # --------------------------------------------------
+
     for start, end, text in read_srt(subtitle_file):
 
         caption = (
@@ -269,14 +282,17 @@ def generate_captioned_video(
                 )
             )
             .with_position(
-                ("center", 430)
+                ("center", 420)
             )
         )
 
         caption_clips.append(caption)
         clips.append(caption)
 
-    # Combine all visual layers
+    # --------------------------------------------------
+    # COMBINE VIDEO
+    # --------------------------------------------------
+
     video = CompositeVideoClip(
         clips,
         size=(360, 640)
@@ -289,13 +305,16 @@ def generate_captioned_video(
         audio_codec="aac"
     )
 
-    # Cleanup
+    # --------------------------------------------------
+    # CLEANUP
+    # --------------------------------------------------
+
     for caption in caption_clips:
         caption.close()
 
     brand_clip.close()
-    top_accent.close()
-    bottom_accent.close()
+    panel_highlight.close()
+    caption_panel.close()
     video.close()
     background.close()
     audio.close()
