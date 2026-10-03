@@ -196,19 +196,23 @@ def generate_captioned_video(
         duration=audio.duration
     ).with_audio(audio)
 
-    brand_clip = (
-    TextClip(
-        text="@Lazy AI Engineer",
-        font_size=16,
-        color="white",
-        stroke_color="black",
-        stroke_width=1,
-        method="label",
-        margin=(6, 6),
-    )
+   brand_clip = TextClip(
+    text="@Lazy AI Engineer",
+    font_size=16,
+    color="white",
+    stroke_color="black",
+    stroke_width=1,
+    method="label",
+    margin=(6, 6),
+)
+
+brand_clip = (
+    brand_clip
     .with_start(0)
     .with_duration(audio.duration)
-    .with_position((230, 20))
+    .with_position(
+        (360 - brand_clip.w - 12, 18)
+    )
 )
 
     clips = [background, brand_clip]
