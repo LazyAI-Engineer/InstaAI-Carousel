@@ -244,7 +244,7 @@ def generate_captioned_video(
     # Small technology label
     ai_subtitle = (
         TextClip(
-            text="AI  •  LLM  •  AGENTS",
+            text="AI  |  LLM  |  AGENTS",
             font_size=17,
             color=(125, 220, 255),
             stroke_color="black",
