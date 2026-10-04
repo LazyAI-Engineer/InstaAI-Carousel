@@ -1,4 +1,5 @@
 import re
+import math
 import asyncio
 import edge_tts
 
@@ -198,7 +199,67 @@ def generate_captioned_video(
     ).with_audio(audio)
 
     # --------------------------------------------------
-    # SMALLER FUTURISTIC CAPTION PANEL
+    # AI VISUAL - UPPER HALF
+    # --------------------------------------------------
+
+    # Cyan glow behind AI text
+    ai_glow = (
+        TextClip(
+            text="AI",
+            font_size=94,
+            color=(0, 190, 255),
+            method="label",
+            margin=(12, 12),
+        )
+        .with_duration(audio.duration)
+        .with_opacity(0.18)
+        .with_position(
+            lambda t: (
+                "center",
+                125 + int(6 * math.sin(t * 0.8))
+            )
+        )
+    )
+
+    # Main AI title
+    ai_title = (
+        TextClip(
+            text="AI",
+            font_size=82,
+            color="white",
+            stroke_color=(0, 190, 255),
+            stroke_width=2,
+            method="label",
+            margin=(10, 10),
+        )
+        .with_duration(audio.duration)
+        .with_position(
+            lambda t: (
+                "center",
+                130 + int(6 * math.sin(t * 0.8))
+            )
+        )
+    )
+
+    # Small technology label
+    ai_subtitle = (
+        TextClip(
+            text="AI  •  LLM  •  AGENTS",
+            font_size=17,
+            color=(125, 220, 255),
+            stroke_color="black",
+            stroke_width=1,
+            method="label",
+            margin=(6, 6),
+        )
+        .with_duration(audio.duration)
+        .with_position(
+            ("center", 245)
+        )
+    )
+
+    # --------------------------------------------------
+    # FUTURISTIC CAPTION PANEL
     # --------------------------------------------------
 
     caption_panel = (
@@ -213,7 +274,6 @@ def generate_captioned_video(
         )
     )
 
-    # Thin cyan accent
     panel_highlight = (
         ColorClip(
             size=(290, 2),
@@ -251,6 +311,9 @@ def generate_captioned_video(
 
     clips = [
         background,
+        ai_glow,
+        ai_title,
+        ai_subtitle,
         caption_panel,
         panel_highlight,
         brand_clip
@@ -315,6 +378,9 @@ def generate_captioned_video(
     brand_clip.close()
     panel_highlight.close()
     caption_panel.close()
+    ai_subtitle.close()
+    ai_title.close()
+    ai_glow.close()
     video.close()
     background.close()
     audio.close()
