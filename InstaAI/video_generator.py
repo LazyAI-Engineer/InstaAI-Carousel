@@ -198,31 +198,31 @@ def generate_captioned_video(
     ).with_audio(audio)
 
     # --------------------------------------------------
-    # FUTURISTIC CAPTION PANEL
+    # SMALLER FUTURISTIC CAPTION PANEL
     # --------------------------------------------------
 
     caption_panel = (
         ColorClip(
-            size=(320, 130),
+            size=(300, 105),
             color=(24, 32, 52),
             duration=audio.duration
         )
         .with_opacity(0.78)
         .with_position(
-            ("center", 385)
+            ("center", 400)
         )
     )
 
-    # Slight inner highlight to make the panel more visible
+    # Thin cyan accent
     panel_highlight = (
         ColorClip(
-            size=(310, 3),
+            size=(290, 2),
             color=(0, 190, 255),
             duration=audio.duration
         )
         .with_opacity(0.75)
         .with_position(
-            ("center", 393)
+            ("center", 407)
         )
     )
 
@@ -267,12 +267,12 @@ def generate_captioned_video(
         caption = (
             TextClip(
                 text=text,
-                font_size=44,
+                font_size=40,
                 color="white",
                 stroke_color="black",
                 stroke_width=2,
                 method="label",
-                margin=(20, 20),
+                margin=(16, 16),
             )
             .with_start(start)
             .with_duration(
